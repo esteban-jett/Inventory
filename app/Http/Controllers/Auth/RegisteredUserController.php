@@ -53,6 +53,9 @@ class RegisteredUserController extends Controller
 
 
         event(new Registered($user));
+        if($request->user_type==='owner'){
+            
+        }
 
         Auth::login($user);
 
