@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\User;
+use App\Models\Business;
 use App\Http\Controllers\business_info_controller;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\csrfController;
@@ -17,6 +18,10 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/all-users', function(){
     return User::all();
+});
+
+Route::get('/all-business', function(){
+    return Business::all();
 });
 
 Route::get('/products', [ProductController::class, 'index']);
