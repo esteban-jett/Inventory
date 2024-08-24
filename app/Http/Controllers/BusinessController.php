@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Business;
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,7 +22,7 @@ class BusinessController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request,Business $business_info)
+    public function store(Request $request)
 {
     
     
@@ -45,15 +46,21 @@ class BusinessController extends Controller
     
     // $business_info = new Business($data);
 
-    $business_info->business_Name = $data['business_image'];
-    $business_info->business_Address = $data['business_Address'];
-    $business_info->business_Contact_Number = $data['business_Contact_Number'];
-    $business_info->business_Email = $data['business_Email'];
-    $business_info->business_SocialMedia = $data['business_SocialMedia'];
+    // $business_info->business_Name = $data['business_image'];
+    // $business_info->business_Address = $data['business_Address'];
+    // $business_info->business_Contact_Number = $data['business_Contact_Number'];
+    // $business_info->business_Email = $data['business_Email'];
+    // $business_info->business_SocialMedia = $data['business_SocialMedia'];
 
-    return [
-        'success' => (bool) $business_info->save()
-    ];
+    // return [
+    //     'success' => (bool) $business_info->save()
+    // ];
+    try{
+        $business = Business::create($data);
+        return response()->json(['sucess'=>true, 'data'=>($business)]);
+    }catch(Exception $e){
+        return response()->json(['error'=>$e->getMessage(), 500]);
+    }
 }
 
     /**
