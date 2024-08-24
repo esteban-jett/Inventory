@@ -25,15 +25,16 @@ class BusinessController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Business $business_info)
+    public function store(Request $request)
 {
+    try{
     $request->validate([
         'business_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'user_id' => 'required|numeric|exists:users,id',
         'business_Name' => 'required|string|max:255',
         'business_Address' => 'required|string|max:255',
         'business_Contact_Number' => 'required|string|max:255',
-        'business_Email'=> 'required|string|lowercase|email|max:255|unique:businesses, business_Email',
+        'business_Email'=> 'required|string|lowercase|email|max:255|unique:businesses,business_Email',
         'business_SocialMedia'=>'required|string|max:255'
     ]);
 
@@ -59,6 +60,9 @@ class BusinessController extends Controller
 }
     }else{
         throw new \Exception('The selected user must be an owner.');
+    }
+    }catch(Exception $e){
+        return response()->json(['error' => $e->getMessage()], 500);
     }
     // $request->validate([
     //     'business_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
