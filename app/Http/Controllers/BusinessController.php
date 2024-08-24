@@ -23,6 +23,8 @@ class BusinessController extends Controller
      */
     public function store(Request $request,Business $business_info)
 {
+    
+    $data['user_id'] = auth()->id;
     $request->validate([
         'business_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'business_Name' => 'required|string|max:255',
@@ -40,9 +42,6 @@ class BusinessController extends Controller
         $data['business_image'] = basename($path);
     }
 
-
-
-    $data['user_id'] = auth()->id;
 
     $business_info = new Business($data);
 
