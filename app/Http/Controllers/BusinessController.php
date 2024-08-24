@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 
 
 class BusinessController extends Controller
@@ -28,6 +30,7 @@ class BusinessController extends Controller
     
     $request->validate([
         'business_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'user_id' => 'required|integer',
         'business_Name' => 'required|string|max:255',
         'business_Address' => 'required|string|max:255',
         'business_Contact_Number' => 'required|integer',
@@ -36,6 +39,7 @@ class BusinessController extends Controller
     ]);
 
     $data = $request->all();
+    Log::info('Data to be saved:', $data);
     
     if ($request->hasFile('business_image')) {
         $image = $request->file('business_image');
@@ -74,66 +78,66 @@ class BusinessController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(int $id, Request $request)
-{
-    $request->validate([
-        'businesslogo' => 'nullable|string|max:255',
-        'businessname' => 'string|max:255',
-        'businessemail' => 'string|max:255',
-        'businessphone' => 'integer',
-        'businesstelephone' => 'integer',
-        'businessfb' => 'string|max:255',
-        'businessig' => 'string|max:255',
-        'businessx' => 'string|max:255',
-    ]);
+//     public function update(int $id, Request $request)
+// {
+//     $request->validate([
+//         'businesslogo' => 'nullable|string|max:255',
+//         'businessname' => 'string|max:255',
+//         'businessemail' => 'string|max:255',
+//         'businessphone' => 'integer',
+//         'businesstelephone' => 'integer',
+//         'businessfb' => 'string|max:255',
+//         'businessig' => 'string|max:255',
+//         'businessx' => 'string|max:255',
+//     ]);
 
-    $business_info = Business::findOrFail($id);
-    $data = $request->all();
+//     $business_info = Business::findOrFail($id);
+//     $data = $request->all();
 
-    if ($request->hasFile('businesslogo')) {
-        // Delete the old image if it exists
-        if ($business_info->businesslogo) {
-            Storage::delete('public/business_logos/' . $business_info->businesslogo);
-        }
-        $image = $request->file('businesslogo');
-        $path = $image->store('public/business_logos');
-        $data['businesslogo'] = basename($path);
-    }
+//     if ($request->hasFile('businesslogo')) {
+//         // Delete the old image if it exists
+//         if ($business_info->businesslogo) {
+//             Storage::delete('public/business_logos/' . $business_info->businesslogo);
+//         }
+//         $image = $request->file('businesslogo');
+//         $path = $image->store('public/business_logos');
+//         $data['businesslogo'] = basename($path);
+//     }
 
-    if (isset($data['businessname'])) {
-        $business_info->businessname = $data['businessname'];
-    }
-    if (isset($data['businessemail'])) {
-        $business_info->businessemail = $data['businessemail'];
-    }
-    if (isset($data['businessphone'])) {
-        $business_info->businessphone = $data['businessphone'];
-    }
-    if (isset($data['businesstelephone'])) {
-        $business_info->businesstelephone = $data['businesstelephone'];
-    }
-    if (isset($data['businessfb'])) {
-        $business_info->businessfb = $data['businessfb'];
-    }
-    if (isset($data['businessig'])) {
-        $business_info->businessig = $data['businessig'];
-    }
-    if (isset($data['businessx'])) {
-        $business_info->businessx = $data['businessx'];
-    }
+//     if (isset($data['businessname'])) {
+//         $business_info->businessname = $data['businessname'];
+//     }
+//     if (isset($data['businessemail'])) {
+//         $business_info->businessemail = $data['businessemail'];
+//     }
+//     if (isset($data['businessphone'])) {
+//         $business_info->businessphone = $data['businessphone'];
+//     }
+//     if (isset($data['businesstelephone'])) {
+//         $business_info->businesstelephone = $data['businesstelephone'];
+//     }
+//     if (isset($data['businessfb'])) {
+//         $business_info->businessfb = $data['businessfb'];
+//     }
+//     if (isset($data['businessig'])) {
+//         $business_info->businessig = $data['businessig'];
+//     }
+//     if (isset($data['businessx'])) {
+//         $business_info->businessx = $data['businessx'];
+//     }
 
-    return [
-        'success' => (bool) $business_info->save()
-    ];
-}
+//     return [
+//         'success' => (bool) $business_info->save()
+//     ];
+// }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(int $id, Business $business_info)
-    {
-        return [
-            'success' => (bool) $business_info -> where('id', $id)->delete()
-        ];
-    }
+//     /**
+//      * Remove the specified resource from storage.
+//      */
+//     public function destroy(int $id, Business $business_info)
+//     {
+//         return [
+//             'success' => (bool) $business_info -> where('id', $id)->delete()
+//         ];
+//     }
 }

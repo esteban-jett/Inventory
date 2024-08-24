@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->unsignedBigInteger('business_id');
-            $table->foreign('business_id')->references('business_id')->on('business')->onDelete('cascade');
+            $table->foreign('business_id')->references('business_id')->on('businesses')->onDelete('cascade');
             $table->id();
             $table->string('name');
             $table->decimal('price', 8, 2);

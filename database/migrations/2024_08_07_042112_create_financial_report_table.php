@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('financial_report', function (Blueprint $table) {
-            $table->increments('report_Id');
-            $table->foreignId('business_Id')->references('business_Id')->on('business')->onDelete('cascade');
+            $table->increments('report_id');
+            $table->foreignId('business_id')->references('business_Id')->on('businesses')->onDelete('cascade');
             $table->date('report_date');
             $table->string('total_sales');
             $table->string('net_profit');

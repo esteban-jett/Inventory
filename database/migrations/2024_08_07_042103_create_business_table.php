@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('business', function (Blueprint $table) {
+        Schema::create('businesses', function (Blueprint $table) {
             $table->bigIncrements('business_id')->primary();  // Add primary key
             //$table->unsignedInteger('user_id');
             $table->string('business_image')->nullable();

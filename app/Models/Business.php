@@ -28,11 +28,12 @@ class Business extends Model
         static::creating (function ($business){
             if(!$business->user_id){
                 throw new \Exception('Null user_id field.');
-            }
+            }else{
             $user = User::find($business->user_id);
             if(!$user || $user->user_type !== "owner"){
                 throw new \Exception('The selected user must be an owner.');
             }
+        }
         });
 
     }
