@@ -20,23 +20,23 @@ class Business extends Model
         'business_SocialMedia'
     ];
 
-    protected static function boot(){
+    // protected static function boot(){
 
-        //para ma-run yung general Model setups na nakukuha ng ibang models
-        parent::boot();
+    //     //para ma-run yung general Model setups na nakukuha ng ibang models
+    //     parent::boot();
 
-        // static::creating (function ($business){
-        //     if(!$business->user_id){
-        //         throw new \Exception('Null user_id field.');
-        //     }else{
-        //     $user = User::find($business->user_id);
-        //     if(!$user || $user->user_type !== "owner"){
-        //         throw new \Exception('The selected user must be an owner.');
-        //     }
-        // }
-        // });
+    //     static::creating (function ($business){
+    //         if(!$business->user_id){
+    //             throw new \Exception('Null user_id field.');
+    //         }else{
+    //         $user = User::find($business->user_id);
+    //         if(!$user || $user->user_type !== "owner"){
+    //             throw new \Exception('The selected user must be an owner.');
+    //         }
+    //     }
+    //     });
 
-    }
+    // }
 
     
 

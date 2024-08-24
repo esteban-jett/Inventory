@@ -54,7 +54,7 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
         if($request->user_type==='owner'){
-            
+            //redirect sa dashboard if not sa user side
         }
 
         Auth::login($user);
