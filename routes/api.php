@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 
 use App\Models\User;
 use App\Http\Controllers\business_info_controller;
+use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\csrfController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,10 +24,10 @@ Route::post('/products', [ProductController::class, 'store']);
 Route::put('/products/{id}', [ProductController::class, 'update']);
 Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 
-Route::get('/business_info', [business_info_controller::class, 'show']);
-Route::post('/business_info', [business_info_controller::class, 'store']);
-Route::put('/business_info/{id}', [business_info_controller::class, 'update']);
-Route::delete('/business_info/{id}', [business_info_controller::class, 'destroy']);
+Route::get('/business_info', [BusinessController::class, 'show']);
+Route::post('/business_info', [BusinessController::class, 'store']);
+Route::put('/business_info/{id}', [BusinessController::class, 'update']);
+Route::delete('/business_info/{id}', [BusinessController::class, 'destroy']);
 
 
 

@@ -12,6 +12,7 @@ class Business extends Model
 
     protected $fillable = [
         'business_image',
+        'user_id',
         'business_Name',
         'business_Address',
         'business_Contact_Number',
@@ -25,6 +26,9 @@ class Business extends Model
         parent::boot();
 
         static::creating (function ($business){
+            if(!$business->user_id){
+                throw new \Exception('Null user_id field.');
+            }
             $user = User::find($business->user_id);
             if(!$user || $user->user_type !== "owner"){
                 throw new \Exception('The selected user must be an owner.');
