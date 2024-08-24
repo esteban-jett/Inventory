@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Business;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
@@ -27,25 +28,35 @@ class BusinessController extends Controller
     public function store(Request $request, Business $business_info)
 {
     $request->validate([
-        'business_image' => 'required|string|max:255',
+        'business_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'user_id' => 'required|numeric|exists:users,id',
         'business_Name' => 'required|string|max:255',
         'business_Address' => 'required|string|max:255',
         'business_Contact_Number' => 'required|string|max:255',
-        'business_Email'=> 'required|string|lowercase|email|max:255|unique',
+        'business_Email'=> 'required|string|lowercase|email|max:255|unique:businesses, business_Email',
         'business_SocialMedia'=>'required|string|max:255'
     ]);
 
-    if($request->user_type==='owner'){
-    $business = Business::create([
-        'business_image' => $request->business_image,
-        'user_id' => $request->user_id,
-        'business_Name' => $request->business_Name,
-        'business_Address' => $request->business_Address,
-        'business_Contact_Number' => $request->business_Contact_Number,
-        'business_Email'=> $request->business_Email,
-        'business_SocialMedia'=>$request->business_SocialMedia
+    $business_image=null;
+    if ($request->hasFile('business_image')) {
+        $image = $request->file('business_image');
+        $path = $image->store('public/business_logos');
+        $business_image = basename($path);
+    }
+
+    if($request->user_id){
+        $user = User::find($request->user_id);
+        if($user->user_type=='owner'){
+            $business = Business::create([
+            'business_image' => $business_image,
+            'user_id' => $request->user_id,
+            'business_Name' => $request->business_Name,
+            'business_Address' => $request->business_Address,
+            'business_Contact_Number' => $request->business_Contact_Number,
+            'business_Email'=> $request->business_Email,
+            'business_SocialMedia'=>$request->business_SocialMedia
     ]);
+}
     }else{
         throw new \Exception('The selected user must be an owner.');
     }
