@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('business', function (Blueprint $table) {
             $table->bigIncrements('business_id')->primary();  // Add primary key
             //$table->unsignedInteger('user_id');
+            $table->string('business_image')->nullable();
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('business_Name');
-            $table->string('business_Eddress');
+            $table->string('business_Address');
             $table->string('business_Contact_Number');
             $table->string('business_Email');
-            $table->string('business_SocialMedia');
+            $table->string('business_SocialMedia')->nullable();
             $table->timestamps();
         });
     }

@@ -24,6 +24,7 @@ Route::put('/business_info/{id}', [business_info_controller::class, 'update']);
 Route::delete('/business_info/{id}', [business_info_controller::class, 'destroy']);
 
 
+
 /*Route::get('/categories', [CategoryController::class, 'index']);
 Route::post('/categories', [CategoryController::class, 'store']);
 Route::put('/categories/{category}', [CategoryController::class, 'update']);
