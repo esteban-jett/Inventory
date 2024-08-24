@@ -40,11 +40,17 @@ class BusinessController extends Controller
         $data['business_image'] = basename($path);
     }
 
-    $business_info->business_Name = $data['business_image'];
-    $business_info->business_Address = $data['business_Address'];
-    $business_info->business_Contact_Number = $data['business_Contact_Number'];
-    $business_info->business_Email = $data['business_Email'];
-    $business_info->business_SocialMedia = $data['business_SocialMedia'];
+
+
+    $data['user_id'] = auth()->id;
+
+    $business_info = new Business($data);
+
+    // $business_info->business_Name = $data['business_image'];
+    // $business_info->business_Address = $data['business_Address'];
+    // $business_info->business_Contact_Number = $data['business_Contact_Number'];
+    // $business_info->business_Email = $data['business_Email'];
+    // $business_info->business_SocialMedia = $data['business_SocialMedia'];
 
     return [
         'success' => (bool) $business_info->save()
