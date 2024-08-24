@@ -25,16 +25,16 @@ class Business extends Model
         //para ma-run yung general Model setups na nakukuha ng ibang models
         parent::boot();
 
-        static::creating (function ($business){
-            if(!$business->user_id){
-                throw new \Exception('Null user_id field.');
-            }else{
-            $user = User::find($business->user_id);
-            if(!$user || $user->user_type !== "owner"){
-                throw new \Exception('The selected user must be an owner.');
-            }
-        }
-        });
+        // static::creating (function ($business){
+        //     if(!$business->user_id){
+        //         throw new \Exception('Null user_id field.');
+        //     }else{
+        //     $user = User::find($business->user_id);
+        //     if(!$user || $user->user_type !== "owner"){
+        //         throw new \Exception('The selected user must be an owner.');
+        //     }
+        // }
+        // });
 
     }
 
