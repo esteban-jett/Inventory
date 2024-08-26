@@ -14,6 +14,7 @@ const searchQuery = ref('');
 
 const newProduct = ref({
     name: '',
+    brand: '',
     price: 0,
     category: '',
     stock: 0,
@@ -26,6 +27,7 @@ const newProduct = ref({
 const editProduct = ref({
     id: null,
     name: '',
+    brand: '',
     price: 0,
     category: '',
     stock: 0,
@@ -64,7 +66,7 @@ const addProduct = async () => {
                 'Content-Type': 'multipart/form-data'
             }
         });
-        products.value.push(response.data);
+        products.value.push(response.data.product);
         showAddProductModal.value = false;
         resetNewProduct();
     } catch (error) {
@@ -72,34 +74,52 @@ const addProduct = async () => {
     }
 };
 
+const validateProduct = (product) => {
+    if (!product.name || !product.brand || !product.price || !product.category || !product.stock || !product.sold || !product.status || !product.expDate) {
+        return false;
+    }
+    return true;
+};
+
 const updateProduct = async () => {
+    if (!validateProduct(editProduct.value)) {
+        console.error("Validation error: Missing required fields");
+        return;
+    }
+
     try {
         const formData = new FormData();
         for (const key in editProduct.value) {
-            // Append only if the value is not null or undefined
-            if (editProduct.value[key] !== null && editProduct.value[key] !== undefined) {
+            if (editProduct.value[key] !== null) {
                 formData.append(key, editProduct.value[key]);
             }
         }
-        if (editProduct.value.image instanceof File) {
+
+        if (editProduct.value.image && typeof editProduct.value.image !== 'string') {
             formData.append('image', editProduct.value.image);
         }
+
+        console.log([...formData.entries()]); // Debugging line
+
         const response = await axios.post(`/api/products/${editProduct.value.id}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'X-HTTP-Method-Override': 'PUT'
+                'X-HTTP-Method-Override': 'PUT',
             }
         });
+
         const index = products.value.findIndex(product => product.id === editProduct.value.id);
-        products.value[index] = response.data;
+        products.value[index] = response.data.product;
         showEditProductModal.value = false;
         resetEditProduct();
     } catch (error) {
-        console.error("Error updating product:", error);
+        if (error.response && error.response.data) {
+            console.error("Validation errors:", error.response.data);
+        } else {
+            console.error("Error updating product:", error);
+        }
     }
 };
-
-
 
 
 const deleteProduct = async (id) => {
@@ -121,6 +141,7 @@ const editProductDetails = (product) => {
 const resetNewProduct = () => {
     newProduct.value = {
         name: '',
+        brand: '',
         price: 0,
         category: '',
         stock: 0,
@@ -135,6 +156,7 @@ const resetEditProduct = () => {
     editProduct.value = {
         id: null,
         name: '',
+        brand: '',
         price: 0,
         category: '',
         stock: 0,
@@ -200,13 +222,13 @@ fetchListedCategories();
                             </div>
                         </div>
                         <div class="overflow-auto" style="max-height: 430px;">
-                            <table class="min-w-full bg-white dark:bg-gray-800">
+                            <table class="min-w-full bg-white dark:bg-gray-800 text-sm">
                                 <thead>
-                                    
                                 <tr>
                                     <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">ID No.</th>
                                     <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">Image</th>
                                     <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">Name</th>
+                                    <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">Brand</th>
                                     <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">Price (PHP)</th>
                                     <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">Category</th>
                                     <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">Stock</th>
@@ -226,6 +248,7 @@ fetchListedCategories();
                                         <img :src="'/storage/' + product.image" alt="Product Image" class="w-12 h-12 object-cover"/>
                                     </td>
                                     <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">{{ product.name }}</td>
+                                    <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">{{ product.brand }}</td>
                                     <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">{{ product.price }}</td>
                                     <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">{{ product.category }}</td>
                                     <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">{{ product.stock }}</td>
@@ -239,10 +262,10 @@ fetchListedCategories();
                                     </td>
                                     <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">{{ product.expDate }}</td>
                                     <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex space-x-4">
-                                        <button @click="editProductDetails(product)" class="bg-yellow-500 text-white p-3 rounded-full">
+                                        <button @click="editProductDetails(product)" class="bg-yellow-500 text-white py-2 px-3 rounded-full">
                                             <font-awesome-icon icon="fa-solid fa-pen" size="sm"/>
                                         </button>
-                                        <button @click="deleteProduct(product.id)" class="bg-red-500 text-white p-3 rounded-full">
+                                        <button @click="deleteProduct(product.id)" class="bg-red-500 text-white py-2 px-3 rounded-full">
                                             <font-awesome-icon :icon="['fas', 'trash-can']" size="sm" />
                                         </button>
                                     </td>
@@ -252,7 +275,7 @@ fetchListedCategories();
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-end mt-4 mr-10 space-x-4">
+                <div class="flex justify-end mt-4 mr-5 space-x-4">
                     <button @click="showAddProductModal = true" class="bg-blue-500 text-white py-2 px-4 rounded">+ Add Product</button>
                     <button @click="showCategoriesModal = true" class="bg-gray-500 text-white py-2 px-4 rounded">Categories</button>
                 </div>
@@ -266,6 +289,10 @@ fetchListedCategories();
                     <div class="mb-4">
                         <label for="name" class="block text-sm font-medium text-gray-700">Product Name</label>
                         <input type="text" id="name" v-model="newProduct.name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                    </div>
+                    <div class="mb-4">
+                        <label for="brand" class="block text-sm font-medium text-gray-700">Brand</label>
+                        <input type="text" id="brand" v-model="newProduct.brand" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
                     </div>
                     <div class="mb-4">
                         <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
@@ -313,9 +340,13 @@ fetchListedCategories();
             <div class="bg-white p-6 rounded-lg shadow-lg">
                 <h3 class="text-lg font-bold mb-4">Edit Product</h3>
                 <form @submit.prevent="updateProduct" enctype="multipart/form-data">
-                <div class="mb-4">
+                    <div class="mb-4">
                         <label for="name" class="block text-sm font-medium text-gray-700">Product Name</label>
                         <input type="text" id="name" v-model="editProduct.name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                    </div>
+                    <div class="mb-4">
+                        <label for="brand" class="block text-sm font-medium text-gray-700">Brand</label>
+                        <input type="text" id="brand" v-model="newProduct.brand" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
                     </div>
                     <div class="mb-4">
                         <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
