@@ -222,13 +222,13 @@ fetchListedCategories();
                             </div>
                         </div>
                         <div class="overflow-auto" style="max-height: 430px;">
-                            <table class="min-w-full bg-white dark:bg-gray-800 text-sm">
+                            <table class="min-w-full bg-white dark:bg-gray-800 text-xs">
                                 <thead>
                                 <tr>
-                                    <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">ID No.</th>
+                                    <th class="px-2 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">ID No.</th>
                                     <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">Image</th>
-                                    <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">Name</th>
-                                    <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">Brand</th>
+                                    <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-left align-middle">Name</th>
+                                    <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-left align-middle">Brand</th>
                                     <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">Price (PHP)</th>
                                     <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">Category</th>
                                     <th class="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">Stock</th>
@@ -243,12 +243,12 @@ fetchListedCategories();
                                     <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700" colspan="10">No products available.</td>
                                 </tr>
                                 <tr v-for="product in filteredProducts" :key="product.id">
-                                    <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">{{ product.id }}</td>
+                                    <td class="px-2 py-4 border-b border-gray-200 dark:border-gray-700">{{ product.id }}</td>
                                     <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                                         <img :src="'/storage/' + product.image" alt="Product Image" class="w-12 h-12 object-cover"/>
                                     </td>
-                                    <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">{{ product.name }}</td>
-                                    <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">{{ product.brand }}</td>
+                                    <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 text-left align-middle">{{ product.name }}</td>
+                                    <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 text-left align-middle">{{ product.brand }}</td>
                                     <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">{{ product.price }}</td>
                                     <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">{{ product.category }}</td>
                                     <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">{{ product.stock }}</td>
@@ -261,14 +261,17 @@ fetchListedCategories();
                                             }">{{ product.status }}</span>
                                     </td>
                                     <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">{{ product.expDate }}</td>
-                                    <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex space-x-4">
-                                        <button @click="editProductDetails(product)" class="bg-yellow-500 text-white py-2 px-3 rounded-full">
-                                            <font-awesome-icon icon="fa-solid fa-pen" size="sm"/>
-                                        </button>
-                                        <button @click="deleteProduct(product.id)" class="bg-red-500 text-white py-2 px-3 rounded-full">
-                                            <font-awesome-icon :icon="['fas', 'trash-can']" size="sm" />
-                                        </button>
+                                    <td class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                                        <div class="flex space-x-4">
+                                            <button @click="editProductDetails(product)" class="bg-yellow-500 text-white py-2 px-3 rounded-full">
+                                                <font-awesome-icon icon="fa-solid fa-pen" size="sm"/>
+                                            </button>
+                                            <button @click="deleteProduct(product.id)" class="bg-red-500 text-white py-2 px-3 rounded-full">
+                                                <font-awesome-icon :icon="['fas', 'trash-can']" size="sm" />
+                                            </button>
+                                        </div>
                                     </td>
+
                                 </tr>
                                 </tbody>
                             </table>
@@ -346,7 +349,7 @@ fetchListedCategories();
                     </div>
                     <div class="mb-4">
                         <label for="brand" class="block text-sm font-medium text-gray-700">Brand</label>
-                        <input type="text" id="brand" v-model="newProduct.brand" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                        <input type="text" id="brand" v-model="editProduct.brand" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
                     </div>
                     <div class="mb-4">
                         <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
